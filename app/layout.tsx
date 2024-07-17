@@ -1,11 +1,14 @@
+import "@radix-ui/themes/styles.css";
+import "./theme-config.css";
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import NavBar from "./NavBar";
-import '@radix-ui/themes/styles.css';
-import { Theme } from '@radix-ui/themes';
 
-const inter = Inter({ subsets: ["latin"] });
+import NavBar from "./NavBar";
+
+import { Theme, ThemePanel } from "@radix-ui/themes";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" }); //default font - but in Radix it is not used by default - we need to use config to make it work
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,13 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Theme> 
-        <NavBar></NavBar>
-        <main className="p-5">
-           {children}
-        </main>
-       </Theme>
+      <body className={inter.variable}>
+        {/* <Theme>  */}
+        <Theme accentColor="purple">
+          <NavBar></NavBar>
+          <main className="p-5">{children}</main>
+          {/* <ThemePanel />   we can use this when we need to visualize and select our styling in browser in a palette - we copy our choice into Theme component above*/}
+        </Theme>
       </body>
     </html>
   );
