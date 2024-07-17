@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchemas";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 // interface IssueForm {   ---> redundant interface because we define it here and in our schema; if we need to add smth in the future we need to rememebr to add in 2 places
 //   title: string;     ---> we will generate interface based on our schema
@@ -32,6 +33,7 @@ const NewIssuePage = () => {
   //   console.log(register("title")); //register fun returns obj with 4 properties - so we need to use ... operator when we call it below in our TextField component
   //we cannot do this in SimpleMDE - because it doesnt compile - we need to import and use COntroller from react
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <div className="max-w-xl">
@@ -45,10 +47,12 @@ const NewIssuePage = () => {
         className="space-y-3"
         onSubmit={handleSubmit(async (data) => {
           try {
+            setIsSubmitting(true);
             await axios.post("/api/issues", data);
             router.push("/issues");
           } catch (error) {
             // console.log(error)
+            setIsSubmitting(false);
             setError("An unexpected error occurred");
           }
         })}
@@ -78,7 +82,7 @@ const NewIssuePage = () => {
 
           {/* </Text> */}
         {/* )} */}
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
       </form>
     </div>
   );
